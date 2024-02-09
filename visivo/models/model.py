@@ -26,7 +26,7 @@ class ScriptModel(Model, NamedModel):
 
 class SqlModel(Model, ParentModel, NamedModel):
     """
-    Model that executes sql against a given database target
+    Model that executes sql against the target
     """
 
     sql: str = Field(
@@ -49,7 +49,7 @@ class SqlModel(Model, ParentModel, NamedModel):
 Models = Union[SqlModel, ScriptModel]
 
 
-class JoinModel(Model, NamedModel, ParentModel):
+class LocalDiskModel(Model, NamedModel, ParentModel):
     """
     Model that makes sub_models available to join.  The target is a temporary sqlite database containing the sub-models.
     """
@@ -58,7 +58,7 @@ class JoinModel(Model, NamedModel, ParentModel):
         None,
         description="The sql used to generate your base data",
     )
-    sub_models: List[Models] = []
+    sub_models: List[generate_ref_field(Models)] = []
 
     def child_items(self):
         return self.sub_models
