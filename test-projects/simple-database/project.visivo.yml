@@ -19,8 +19,6 @@ targets:
     type: sqlite
   - name: local-postgres
     database: postgres
-    type: postgresql
-    host: localhost
     username: postgres
     password: "{{ env_var('PG_PASSWORD') }}"
     port: 5434
