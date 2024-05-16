@@ -3,11 +3,14 @@ from pathlib import Path
 from visivo.commands.init import init
 from tests.support.utils import temp_folder
 from click.testing import CliRunner
+import sys
 
 runner = CliRunner()
 
 
 def test_init_with_sqlite():
+    assert not sys.stdin.isatty()
+
     tmp = temp_folder()
 
     response = runner.invoke(init, input=f"{tmp}\nsqlite\n")

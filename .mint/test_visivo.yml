@@ -13,49 +13,48 @@ tasks:
   - key: code
     call: mint/git-clone 1.1.5
     with:
-      repository: https://github.com/visivo-io/visivo.git
-      ref: ${{ init.commit-sha }}
-      github-access-token: ${{ secrets.VISIVO_IO_CLONE_TOKEN }}
-  
+      repository: https://github.com/kylekthompson/visivo.git
+      ref: kt/debug
+
   - key: python
     call: mint/install-python 1.0.2
     with:
       python-version: 3.10.0
-  
+
   - key: node
     call: mint/install-node 1.0.5
     with:
       node-version: 18.0.0
-  
+
   - key: pip-install-poetry
     use: [python]
-    run: pip install poetry 
-  
+    run: pip install poetry
+
   - key: poetry-install
     use: [code, pip-install-poetry]
     run: poetry install --with dev
-  
+
   - key: visivo-install
     use: [poetry-install]
-    run: poetry build && pip install dist/visivo-*-py3-none-any.whl 
-  
+    run: poetry build && pip install dist/visivo-*-py3-none-any.whl
+
   - key: test-cli
     use: [poetry-install]
-    run: poetry run pytest 
-    env: 
+    run: poetry run pytest
+    env:
       STACKTRACE: true
-  
+
   - key: test-viewer
     use: [code, node]
-    run: | 
+    run: |
       cd viewer
       npm install --global yarn
-      yarn install 
+      yarn install
       yarn test
-  
+
   - key: test-snowflake
     use: [visivo-install]
-    run: | 
+    run: |
       cd test-projects/simple-database
       visivo run -t remote-snowflake
     env:
@@ -63,10 +62,10 @@ tasks:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       CLI_UNIT_TESTING_SNOWFLAKE_USER: ${{ secrets.CLI_UNIT_TESTING_SNOWFLAKE_USER }}
       CLI_UNIT_TESTING_SNOWFLAKE_PASSWORD: ${{ secrets.CLI_UNIT_TESTING_SNOWFLAKE_PASSWORD }}
-  
+
   - key: test-complex-project
     use: [visivo-install]
-    run: | 
+    run: |
       cd test-projects/complex-project
       visivo run
     env:
