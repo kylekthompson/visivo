@@ -126,7 +126,6 @@ def init_phase():
         Logger.instance().info(
             f"> You may need to register or get added to an account before visiting your profile."
         )
-        raise NotImplementedError("getting token")
         token = click.prompt("? Personal token", type=str)
         raise NotImplementedError("got token")
         os.makedirs(f"{user_home}/.visivo", exist_ok=True)
